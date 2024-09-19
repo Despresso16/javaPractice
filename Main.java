@@ -1,5 +1,8 @@
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Scanner;
+import java.util.List;
+
 
 import static java.lang.Math.decrementExact;
 import static java.lang.Math.pow;
@@ -205,8 +208,64 @@ public class Main {
         for(int i = 1; i < num; i += 2){
             System.out.println(i);
         }
-        //zad 1
+        //zad 2
         System.out.println("Zad2");
+        int A = 0;
+        System.out.print("Podaj liczbe A: ");
+        A = sc.nextInt();
+        int B = A - 1;
+        while(A >= B){
+            System.out.print("Podaj liczbe B (wieksze od A): ");
+            B = sc.nextInt();
+            if(A > B) System.out.println("B musi być większe");
+        }
+        while(A <= B){
+            System.out.print(A + ", ");
+            A++;
+        }
+        System.out.println((" "));
+        //zad 3
+        System.out.println("Zad3");
+        System.out.print("Podaj liczbe dodatnia: ");
+        num = sc.nextInt();
+        if(num < 0){
+            System.out.println("Miales podac dodatnia");
+            num *= -1;
+        }
+        for(int i = 1; i < num; i *= 2){
+            System.out.print(i + ", ");
+        }
+        System.out.println((" "));
+        //zad 4
+        System.out.println("Zad4");
+        num = 1;
+        int sum = 0;
+        while(num != 0){
+            System.out.print("Podaj liczbe lub 0 aby zakonczyc: ");
+            num = sc.nextInt();
+            sum += num;
+        }
+        System.out.println("Suma: " + sum);
+        //zad 5
+        System.out.println("Zad5");
+        List<Integer> numList = new ArrayList<>();
+        num = 1;
+        while(num != 0){
+            System.out.print("Podaj liczbe lub 0 aby zakonczyc: ");
+            num = sc.nextInt();
+            if(num != 0){
+                numList.add(num);
+            }
+        }
+        int min= numList.get(0), max = numList.get(0);
+        for(int i = 1; i < numList.size(); i++){
+            if(min > numList.get(i)) min = numList.get(i);
+            if(max < numList.get(i)) max = numList.get(i);
+        }
+        int avg = (min + max) / 2;
+        System.out.println("Min: " + min + " Max: " + max + " Avg min i max: " + avg);
+        //zad 6
+        System.out.println("Zad6");
         //...
     }
 }
