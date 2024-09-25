@@ -55,8 +55,6 @@ public class Main {
         //zad3
         System.out.println("Zad3");
         int[][] numMulti = new int[5][5];
-        min = 5;
-        max = -5;
         for(int i = 0; i < 5; i++){
             for (int j = 0; j < 5; j++){
                 numMulti[i][j] = rnd.nextInt(10) -4;
@@ -67,6 +65,8 @@ public class Main {
         int kolumnaCount = 0;
         for(int j = 0; j < 5; j++){
             kolumnaCount = j + 1;
+            min = 5;
+            max = -5;
             for (int i = 0; i < 5; i++){
                 if(min > numMulti[i][j]) min = numMulti[i][j];
                 if(max < numMulti[i][j]) max = numMulti[i][j];
