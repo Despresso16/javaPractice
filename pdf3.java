@@ -30,6 +30,38 @@ public class Main {
             if(num > avg) more += 1;
         }
         System.out.println("\nMin: " + min + " Max: " + max + "\nAvg: " + avg + " Mniej niz avg:" + less + " Wiecej niz avg: " + more);
+        for(int i = numAimport java.util.*;
+
+//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
+// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+public class pdf3 {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        Random rnd = new Random();
+        //zad1
+        System.out.println("Zad1");
+        int[] numArray = new int[10];
+        int min = 10, max = -10;
+        int avg = 0;
+        int index = 0;
+        for(int num : numArray){
+            num = rnd.nextInt(20) - 9;
+            numArray[index] = num;
+            System.out.print(num + ", ");
+            if(min > num) min = num;
+            if(max < num) max = num;
+            avg += num;
+            index++;
+        }
+        System.out.println(" ");
+        avg /= numArray.length;
+        int less = 0, more = 0;
+        for(int num : numArray){
+            System.out.print(num + ", ");
+            if(num < avg) less += 1;
+            if(num > avg) more += 1;
+        }
+        System.out.println("\nMin: " + min + " Max: " + max + "\nAvg: " + avg + " Mniej niz avg:" + less + " Wiecej niz avg: " + more);
         for(int i = numArray.length - 1; i >= 0; i-- ){
             System.out.print(numArray[i] + ", ");
         }
@@ -75,7 +107,50 @@ public class Main {
         }
         //zad4
         System.out.println("Zad4");
-
+        System.out.print("Podaj liczbe calkowita: ");
+        String binaryString = "0.";
+        double num = (double)sc.nextInt();
+        if(num < 0){
+            num *= -1;
+            binaryString = "1.";
+        }
+        List<Integer> binaryArray = new ArrayList<>();
+        while(true){
+            binaryArray.add((int)(num % 2));
+            num = (double)((int)num / 2);
+            if(num == 1){
+                binaryArray.add((int)(num % 2));
+                num = (double)((int)num / 2);
+                break;
+            }
+        }
+        for(int i = binaryArray.size() - 1; i >= 0; i--){
+            binaryString += String.valueOf(binaryArray.get(i));
+        }
+        System.out.println(binaryString);
+        //zad5
+        System.out.println("Zad5");
+        System.out.print("Podaj liczbe calkowita: ");
+        num = (double)sc.nextInt();
+        String zu1 = "0.";
+        if(num < 0){
+            num *= -1;
+            binaryString = "1.";
+        }
+        binaryArray = new ArrayList<>();
+        while(true){
+            binaryArray.add((int)(num % 2));
+            num = (double)((int)num / 2);
+            if(num == 1){
+                binaryArray.add((int)(num % 2));
+                num = (double)((int)num / 2);
+                break;
+            }
+        }
+        for(int i = binaryArray.size() - 1; i >= 0; i--){
+            binaryString += String.valueOf(binaryArray.get(i));
+        }
+        System.out.println(binaryString);
 
 
     }
