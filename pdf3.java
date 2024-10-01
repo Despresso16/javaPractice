@@ -145,12 +145,13 @@ import java.util.*;
                     binaryString += String.valueOf(binaryArray.get(i));
                 }
                 System.out.println("ZU2: " + binaryString);
-                //zad5
+                //zad6
                 System.out.println("Zad6");
                 System.out.print("Wybierz system(1 - ZM, 2 - ZU1, 3 - ZU2): ");
                 int system = sc.nextInt();
                 System.out.print("Podaj 1 liczbe binarnie: ");
                 String bin1 = sc.nextLine();
+                bin1 = sc.nextLine();
                 System.out.print("Podaj 2 liczbe binarnie: ");
                 String bin2 = sc.nextLine();
                 int bitLength = Math.max(bin1.length(), bin2.length());
@@ -166,28 +167,27 @@ import java.util.*;
                 }
                 System.out.println("Wynik: " + result);
                 //zad 7
-                System.out.println("Zad 7 (Obie liczby powinny byc tej samej długości!)");
+
+                System.out.println("Zad 7, probowalem i sie poddalem");
                 System.out.print("Podaj liczbe 1 binarnie: ");
                 String binaryNum1 = sc.nextLine();
                 System.out.print("Podaj liczbe 2 binarnie: ");
                 String binaryNum2 = sc.nextLine();
-                if (binaryNum1.length() != binaryNum2.length()) {
-                    System.out.println("Nierowna dlugosc!");
-                }
-                else boothMultiplication(binaryNum1, binaryNum2);
+                System.out.println(boothMultiplication(binaryNum1, binaryNum2));
                 //zad 8
-                System.out.println("Zad 8 (Obie liczby powinny byc tej samej długości!)");
-                System.out.print("Ponam 1 liczbe binarnie: ");
-                binaryNum1 = sc.nextLine();
-                System.out.print("Ponam 2 liczbe binarnie: ");
-                binaryNum2 = sc.nextLine();
-                if (binaryNum1.length() != binaryNum2.length()) {
-                    System.out.println("Nierowna dlugosc");
-                }
-                else{
-                    compareDivision(binaryNum1, binaryNum2);
-                    nonRestoringDivision(binaryNum1, binaryNum2);
-                }
+
+                System.out.println("Zad 8, probowalem i sie poddalem");
+                System.out.print("Podaj liczbe 1 binarnie: ");
+                String binaryDividend = sc.nextLine();
+                System.out.print("Podaj liczbe 1 binarnie:: ");
+                String binaryDivisor = sc.nextLine();
+
+                System.out.println("Porownawcza:");
+                System.out.println(comparativeDivision(binaryDividend, binaryDivisor));
+
+
+                System.out.println("nierestytucyjna:");
+                System.out.println(nonRestoringDivision(binaryDividend, binaryDivisor));
                 //zad 9
                 System.out.println("Zad 9");
                 System.out.print("Podaj liczbe n: ");
@@ -218,54 +218,113 @@ import java.util.*;
                     System.out.println();
                 }
             }
-            public static String addBinary(String a, String b) {
+
+            private static String comparativeDivision(String dividend, String divisor) {
+                StringBuilder quotient = new StringBuilder("0".repeat(32));
+                StringBuilder remainder = new StringBuilder("0".repeat(32));
+                dividend = padTo32Bits(dividend);
+                divisor = padTo32Bits(divisor);
+
+                for (int i = 0; i < 32; i++) {
+                    remainder.deleteCharAt(0);
+                    remainder.append(dividend.charAt(i));
+
+                    if (compare(remainder.toString(), divisor) >= 0) {
+                        quotient.setCharAt(i, '1');
+                        remainder = new StringBuilder(subtract(remainder.toString(), divisor));
+                    }
+                }
+
+                return quotient.toString();
+            }
+
+            private static String nonRestoringDivision(String dividend, String divisor) {
+                StringBuilder quotient = new StringBuilder("0".repeat(32));
+                StringBuilder remainder = new StringBuilder("0".repeat(32));
+                dividend = padTo32Bits(dividend);
+                divisor = padTo32Bits(divisor);
+                String negDivisor = negate(divisor);
+
+                for (int i = 0; i < 32; i++) {
+                    remainder.deleteCharAt(0);
+                    remainder.append(dividend.charAt(i));
+
+                    if (remainder.charAt(0) == '0') {
+                        remainder = new StringBuilder(add(remainder.toString(), negDivisor));
+                        quotient.setCharAt(i, '1');
+                    } else {
+                        remainder = new StringBuilder(add(remainder.toString(), divisor));
+                        quotient.setCharAt(i, '0');
+                    }
+                }
+
+                if (remainder.charAt(0) == '1') {
+                    remainder = new StringBuilder(add(remainder.toString(), divisor));
+                }
+
+                return quotient.toString();
+            }
+
+            private static String boothMultiplication(String multiplicand, String multiplier) {
+                multiplicand = padTo32Bits(multiplicand);
+                multiplier = padTo32Bits(multiplier);
+                StringBuilder product = new StringBuilder("0".repeat(64));
+                String m = multiplicand + "0".repeat(32);
+                String negM = negate(m);
+                product.replace(32, 64, multiplier + "0");
+
+                for (int i = 0; i < 32; i++) {
+                    String lastTwoBits = product.substring(62, 64);
+                    if (lastTwoBits.equals("01")) {
+                        String sum = add(product.substring(0, 32), m);
+                        product.replace(0, 32, sum);
+                    } else if (lastTwoBits.equals("10")) {
+                        String sum = add(product.substring(0, 32), negM);
+                        product.replace(0, 32, sum);
+                    }
+                    char msb = product.charAt(0);
+                    product.deleteCharAt(63);
+                    product.insert(0, msb);
+                }
+                return product.substring(0, 32);
+            }
+
+            private static String padTo32Bits(String binary) {
+                return "0".repeat(Math.max(0, 32 - binary.length())) + binary;
+            }
+
+            private static String negate(String binary) {
+                StringBuilder negated = new StringBuilder();
+                for (char bit : binary.toCharArray()) {
+                    negated.append(bit == '0' ? '1' : '0');
+                }
+                return add(negated.toString(), "1" + "0".repeat(63));
+            }
+
+            private static int compare(String a, String b) {
+                for (int i = 0; i < 32; i++) {
+                    if (a.charAt(i) < b.charAt(i)) return -1;
+                    if (a.charAt(i) > b.charAt(i)) return 1;
+                }
+                return 0;
+            }
+
+            private static String subtract(String a, String b) {
+                return add(a, negate(b));
+            }
+
+            private static String add(String a, String b) {
                 StringBuilder result = new StringBuilder();
                 int carry = 0;
-                int length = a.length();
-                for (int i = length - 1; i >= 0; i--) {
-                    int bitA = a.charAt(i) - '0';
-                    int bitB = b.charAt(i) - '0';
-                    int sum = bitA + bitB + carry;
+                for (int i = a.length() - 1; i >= 0; i--) {
+                    int sum = (a.charAt(i) - '0') + (b.charAt(i) - '0') + carry;
                     result.insert(0, sum % 2);
                     carry = sum / 2;
                 }
-                if (carry > 0) {
-                    result.insert(0, carry);
-                }
                 return result.toString();
             }
-            public static String twosComplement(String binary) {
-                StringBuilder onesComplement = new StringBuilder();
-                for (char bit : binary.toCharArray()) {
-                    onesComplement.append(bit == '0' ? '1' : '0');
-                }
-                return addBinary(onesComplement.toString(), "1");
-            }
-            public static String arithmeticShiftRight(String acc, String q, char q_1) {
-                char signBit = acc.charAt(0);
-                acc = signBit + acc.substring(0, acc.length() - 1);
-                q = acc.charAt(acc.length() - 1) + q.substring(0, q.length() - 1);
-                return acc + q + q_1;
-            }
-            public static void boothMultiplication(String num1, String num2) {
-                int num1Len = num1.length();
-                String acc = "0".repeat(num1Len);
-                char charNum2 = '0';
-                String num1Minus = twosComplement(num1);
-                for (int i = 0; i < num1Len; i++) {
-                    if (num2.charAt(num2.length() - 1) == '1' && charNum2 == '0') {
-                        acc = addBinary(acc, num1Minus);
-                    } else if (num2.charAt(num2.length() - 1) == '0' && charNum2 == '1') {
-                        acc = addBinary(acc, num1);
-                    }
-                    String combined = arithmeticShiftRight(acc, num2, charNum2);
-                    acc = combined.substring(0, num1Len);
-                    num2 = combined.substring(num1Len, 2 * num1Len);
-                    charNum2 = combined.charAt(combined.length() - 1);
 
-                }
-                System.out.println("Wynik: " + acc + num2);
-            }
+
             public static String addZM(String bin1, String bin2, int bitLength) {
                 int sign1 = bin1.charAt(0) == '1' ? -1 : 1;
                 int sign2 = bin2.charAt(0) == '1' ? -1 : 1;
@@ -335,60 +394,5 @@ import java.util.*;
                     result.append(bit == '0' ? '1' : '0');
                 }
                 return result.toString();
-            }
-            public static String subtractBinary(String a, String b) {
-                String bComplement = twosComplement(b);
-                return addBinary(a, bComplement);
-            }
-            public static String padBinary(String binary, int length) {
-                while (binary.length() < length) {
-                    binary = "0" + binary;
-                }
-                return binary;
-            }
-            public static int compareBinary(String a, String b) {
-                int length = Math.max(a.length(), b.length());
-                a = padBinary(a, length);
-                b = padBinary(b, length);
-
-                for (int i = 0; i < length; i++) {
-                    if (a.charAt(i) != b.charAt(i)) {
-                        return a.charAt(i) - b.charAt(i);
-                    }
-                }
-                return 0;
-            }
-            public static void compareDivision(String num1, String num2) {
-                int n = num1.length();
-                String quotient = "";
-                String rest = num1;
-                System.out.println("Metoda porównawcza (zrestytucyjna):");
-                for (int i = 0; i < n; i++) {
-                    rest = rest.substring(1) + "0";
-                    if (compareBinary(rest, num2) >= 0) {
-                        rest = subtractBinary(rest, num2);
-                        quotient += "1";
-                    } else {
-                        quotient += "0";
-                    }
-                }
-                System.out.println("Wynik: " + quotient + ", Reszta: " + rest);
-            }
-            public static void nonRestoringDivision(String num1, String num2) {
-                int n = num1.length();
-                String quotient = "";
-                String rest = num1;
-                System.out.println("Metoda nierestytucyjna:");
-                for (int i = 0; i < n; i++) {
-                    rest = rest.substring(1) + "0";
-                    if (rest.charAt(0) == '0') {
-                        rest = subtractBinary(rest, num2);
-                        quotient += "1";
-                    } else {
-                        rest = addBinary(rest, num2);
-                        quotient += "0";
-                    }
-                }
-                System.out.println("Wynik: " + quotient + ", Reszta: " + rest);
             }
         }
