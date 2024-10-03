@@ -1,7 +1,9 @@
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
-public class Exercises {
+public class Pdf4 {
 
     public static void zad1() {
         Scanner sc = new Scanner(System.in);
@@ -72,11 +74,16 @@ public class Exercises {
         System.out.print("Podaj text: ");
         String text = sc.nextLine();
         System.out.print("Podaj n: ");
-        char[] charText = text.toCharArray();
+        List charText = Arrays.asList(text.toCharArray());
+        char[] alphabet = "abcdefghijklmnopqrstuvwxyz".toCharArray();
         int n = sc.nextInt();
         for(int i = 0; i < text.length(); i++) {
-            charText[i] = Character.toChars((int) text.charAt(i) + n)[0];
-            System.out.print(charText[i]);
+            int newIndex = i + n;
+            while(newIndex > charText.size() - 1){
+                newIndex -= (charText.size() - 1);
+            }
+            if(Character.isUpperCase((char) charText.get(i))) charText.get(i) = Character.toUpperCase(alphabet[newIndex]);
+            System.out.print(charText.get(i));
         }
     }
 
