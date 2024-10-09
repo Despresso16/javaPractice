@@ -1,3 +1,4 @@
+import javax.swing.text.StyledEditorKit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -74,17 +75,28 @@ public class Pdf4 {
         System.out.print("Podaj text: ");
         String text = sc.nextLine();
         System.out.print("Podaj n: ");
-        List charText = Arrays.asList(text.toCharArray());
-        char[] alphabet = "abcdefghijklmnopqrstuvwxyz".toCharArray();
-        int n = sc.nextInt();
-        for(int i = 0; i < text.length(); i++) {
-            int newIndex = i + n;
-            while(newIndex > charText.size() - 1){
-                newIndex -= (charText.size() - 1);
-            }
-            if(Character.isUpperCase((char) charText.get(i))) charText.get(i) = Character.toUpperCase(alphabet[newIndex]);
-            System.out.print(charText.get(i));
+        List<Character> charList = new ArrayList<Character>();
+        for(int i = 0; i < text.length(); i++){
+            charList.add(text.charAt(i));
         }
+        char[] alphabetArray = "abcdefghijklmnopqrstuvwxyz".toCharArray();
+        int n = sc.nextInt();
+        for(int i = 0; i < charList.size(); i++) {
+            boolean isChar = false;
+            for(int j = 0; j < alphabetArray.length; j++){
+                if(alphabetArray[j] == charList.get(i)) isChar = true;
+            }
+            if(isChar){
+                int newIndex = (i + n) % alphabetArray.length;
+                if(newIndex < 0) newIndex += alphabetArray.length;
+                if(Character.isUpperCase(charList.get(i))) charList.set(i, Character.toUpperCase(alphabetArray[newIndex]));
+                else charList.set(i, alphabetArray[newIndex]);
+                System.out.print(charList.get(i));
+            }
+            else System.out.println("nie litera");
+        }
+        System.out.println();
     }
+
 
 }
