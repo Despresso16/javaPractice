@@ -28,10 +28,16 @@ public class Pdf5 {
         System.out.print("Podaj liczbe: ");
         int num = sc.nextInt();
         System.out.println("Iteracyjnie: ");
-        int result = 0;
-        for(int i = 1; i <= num; i++){
-
+        System.out.print("0, ");
+        int a = 0, b = 1;
+        for(int i = 3; i < num; i++){
+            System.out.print(b + ", ");
+            b += a;
+            a = b-a;
         }
+        System.out.println("Rekurencyjnie: ");
+
     }
+
 
 }
