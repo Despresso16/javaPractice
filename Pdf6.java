@@ -138,11 +138,17 @@ public class Pdf6 {
     public static void zad4() throws IOException {
         System.out.println("zad4");
         Scanner sc = new Scanner(System.in);
-        System.out.print("Podaj nazwe pliku (w src, bez .txt) (file1 bazowo)");
+        System.out.print("Podaj nazwe pliku (w src, bez .txt) (file1 bazowo): ");
         String fileName = sc.nextLine();
-        System.out.println("Podaj przesuniecie");
+        System.out.print("Podaj przesuniecie: ");
         int n = sc.nextInt();
         szyfruj(fileName, n);
+        System.out.print("Podaj nazwe pliku do ryzszyfrowania (w src, bez .txt) (nazwę_file1 bazowo): ");
+        String fileName2 = sc.nextLine();
+        fileName2 = sc.nextLine();
+        System.out.print("Podaj przesuniecie: ");
+        int n2 = sc.nextInt();
+        deszyfruj(fileName2, n2);
 
     }
     private static void szyfruj(String nazwaWe, int przesun) throws IOException {
@@ -167,13 +173,17 @@ public class Pdf6 {
         char[] alphabetArray = "aąbcćdeęfghijklłmnńoópqrsśtuvwxyzźż".toCharArray();
         for(int i = 0; i < charList.size(); i++) {
             boolean isChar = false;
+            int alphIndex = 0;
             for(int j = 0; j < alphabetArray.length; j++){
-                if(alphabetArray[j] == charList.get(i)) isChar = true;
+                if(alphabetArray[j] == charList.get(i) || Character.toUpperCase(alphabetArray[j]) == charList.get(i)) {
+                    isChar = true;
+                    alphIndex = j;
+                    break;
+                }
             }
             if(isChar){
-                int newIndex = (i + przesun) % alphabetArray.length;
+                int newIndex = (alphIndex + przesun) % alphabetArray.length;
                 if(newIndex < 0) newIndex += alphabetArray.length;
-                //nie dzialaja uppercase to fix
                 if(Character.isUpperCase(charList.get(i))) charList.set(i, Character.toUpperCase(alphabetArray[newIndex]));
                 else charList.set(i, alphabetArray[newIndex]);
             }
@@ -182,7 +192,7 @@ public class Pdf6 {
         text = String.valueOf(textBuilder);
         FileWriter fileWriter = null;
         try{
-            fileWriter = new FileWriter("src/nązwe_" + nazwaWe + ".txt");
+            fileWriter = new FileWriter("src/nazwę_" + nazwaWe + ".txt");
             fileWriter.write(String.valueOf(text));
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -190,7 +200,79 @@ public class Pdf6 {
             if(fileWriter != null) fileWriter.close();
         }
     }
-    private static void deszyfruj(String nazwaWe, int przesun){
+    private static void deszyfruj(String nazwaWe, int przesun) throws IOException {
+        StringBuilder textBuilder = new StringBuilder();
+        try{
+            File file = new File("src/" + nazwaWe + ".txt");
+            Scanner sc = new Scanner(file);
+            while(sc.hasNextLine()){
+                String line = sc.nextLine();
+                textBuilder.append(line += "\n");
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("Nieprawidlowa nazwa pliku!");
+            return;
+        }
+        String text = String.valueOf(textBuilder);
+        char[] alphabetArray = "aąbcćdeęfghijklłmnńoópqrsśtuvwxyzźż".toCharArray();
+        textBuilder = new StringBuilder();
+        List<Character> charList = new ArrayList<Character>();
+        for(int i = 0; i < text.length(); i++){
+            charList.add(text.charAt(i));
+        }
+        for(int i = 0; i < charList.size(); i++){
+            int alphIndex = 0;
+            boolean isChar = false;
+            for(int j = 0; j < alphabetArray.length; j++){
+                if(alphabetArray[j] == charList.get(i) || Character.toUpperCase(alphabetArray[j]) == charList.get(i)){
+                    alphIndex = j;
+                    isChar = true;
+                }
+            }
+            if(isChar){
+                int newIndex = alphIndex - przesun;
+                while(newIndex < 0){
+                    newIndex += alphabetArray.length;
+                }
+                if(Character.isUpperCase(charList.get(i))) charList.set(i, Character.toUpperCase(alphabetArray[newIndex]));
+                else charList.set(i, alphabetArray[newIndex]);
+            }
+            textBuilder.append(charList.get(i));
+        }
+        text = String.valueOf(textBuilder);
+        FileWriter fileWriter = null;
+        try{
+            fileWriter = new FileWriter("src/rozszyfr_" + nazwaWe + ".txt");
+            fileWriter.write(String.valueOf(text));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if(fileWriter != null) fileWriter.close();
+        }
+    }
+    public void zad5(){
+        System.out.println("zad5");
+        Scanner sc = new Scanner(System.in);
+
+    }
+    private void emerytura(String nazwaPliku){
+        StringBuilder text = new StringBuilder();
+        try{
+            File file = new File(nazwaPliku);
+            Scanner sc = new Scanner(file);
+            while(sc.hasNextLine()){
+                String line = sc.nextLine();
+                String strNum = "";
+                boolean readingNum = false;
+                for(char c: line.toCharArray()){
+                    
+                }
+                text.append(line += "\n");
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("Nieprawidlowa nazwa pliku!");
+            return;
+        }
 
     }
 }
