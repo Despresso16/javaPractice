@@ -360,6 +360,7 @@ public class Pdf6 {
         int max = 1;
         for(int count:alphabetValues) if(max < count) max = count;
         int valuePerStar = max / 50;
+        if(valuePerStar <= 0) valuePerStar = 1;
         System.out.println(valuePerStar);
         for(int i = 0; i < alphabet.length; i++){
             chartBuilder.append(alphabet[i]).append(" ");
